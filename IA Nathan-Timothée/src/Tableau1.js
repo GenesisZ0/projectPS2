@@ -127,11 +127,7 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-        this.physics.add.overlap(this.HauteHerbe, this.persoC, function () {
-            me.hide = true;
-            console.log(me.hide);
 
-        })
 
 
 
@@ -142,6 +138,7 @@ class Tableau1 extends Phaser.Scene {
 
         this.initKeyboard();
 
+        this.physics.add.overlap(this.persoC,this.HauteHerbe)
         this.physics.add.overlap(this.sword, this.perso, function (){
             me.perso.hp -= me.sword.attack;
         })
@@ -164,7 +161,7 @@ class Tableau1 extends Phaser.Scene {
             this.persoC.setVisible(true)
             this.perso.setVisible(false)
             this.perso.disableBody(true);
-            this.perso.y = this.persoC.y -30 ;
+            this.perso.y = this.persoC.y -29 ;
             this.perso.x = this.persoC.x
 
 
@@ -173,7 +170,7 @@ class Tableau1 extends Phaser.Scene {
             this.cameras.main.startFollow(this.perso,false);
             this.persoC.disableBody()
             this.perso.enableBody();
-            this.persoC.y = this.perso.y +30 ;
+            this.persoC.y = this.perso.y +29 ;
             this.persoC.x = this.perso.x
             this.persoC.setVisible(false)
             this.perso.setVisible(true)
@@ -212,29 +209,32 @@ class Tableau1 extends Phaser.Scene {
     IaGesttion(){
         this.gauche = false;
 
-
-        this.dist = Phaser.Math.Distance.BetweenPoints(this.perso,this.ai);
-
-
-        if (this.dist <= 300 ){
-            if (this.perso.x <= this.ai.x){
-                this.ai.setVelocityX(-200)
-                this.gauche = true;
-            }
-            else if(this.perso.x >= this.ai.x) {
-                this.ai.setVelocityX(200)
+        if (this.hide == false){
+            this.dist = Phaser.Math.Distance.BetweenPoints(this.perso,this.ai);
 
 
-            }
+            if (this.dist <= 300 ){
+                if (this.perso.x <= this.ai.x){
+                    this.ai.setVelocityX(-200)
+                    this.gauche = true;
+                }
+                else if(this.perso.x >= this.ai.x) {
+                    this.ai.setVelocityX(200)
 
-            this.stop = this.ai.x;
 
-            this.time.addEvent({ delay: 50, callback: this.Jump, callbackScope: this });
+                }
 
-            if (this.dist <=  100 ){
-                this.attackAi()
+                this.stop = this.ai.x;
+
+                this.time.addEvent({ delay: 50, callback: this.Jump, callbackScope: this });
+
+                if (this.dist <=  100 ){
+                    this.attackAi()
+                }
             }
         }
+
+
     }
 
     attackAi(){
@@ -288,6 +288,19 @@ class Tableau1 extends Phaser.Scene {
     this.persoC.x = this.perso.x-10
     this.persoC.y = this.perso.y
 }
+
+
+    test(){
+       if ( this.physics.overlap(this.persoC,this.HauteHerbe) === false){
+           this.hide = false;
+           console.log(this.hide);
+       }
+       else{
+           this.hide = true
+           console.log(this.hide);
+       }
+   }
+
     update(){
 
 
@@ -297,12 +310,19 @@ class Tableau1 extends Phaser.Scene {
         }
 
 
-        this.rouch();
+
+
+
+            this.rouch();
+        if (this.crouch ===true){
+            this.test()
+        }
+        else{
+
+        }
             this.IaGesttion()
 
-        if (this.persoC.body.touching.none){
-            console.log("plus touché");
-        }
+
 
 
         if(this.perso.hp <= 0){
@@ -357,11 +377,10 @@ class Tableau1 extends Phaser.Scene {
 
                     if (me.crouch === true){
                         me.crouch = false;
-                        console.log(me.crouch);
+
                     }
                     else {
                         me.crouch = true;
-                        console.log(me.crouch);
                         break;
 
                     }
@@ -373,9 +392,7 @@ class Tableau1 extends Phaser.Scene {
                     if (me.perso.body.onFloor(true)){
                         me.perso.setVelocityY(-350)
                     }
-                    else{
-                        console.log("test");
-                    }
+
 
             }
         })
