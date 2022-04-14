@@ -161,7 +161,7 @@ class Tableau1 extends Phaser.Scene {
             this.persoC.setVisible(true)
             this.perso.setVisible(false)
             this.perso.disableBody(true);
-            this.perso.y = this.persoC.y -29 ;
+            this.perso.y = this.persoC.y -30;
             this.perso.x = this.persoC.x
 
 
@@ -169,39 +169,46 @@ class Tableau1 extends Phaser.Scene {
         else{
             this.cameras.main.startFollow(this.perso,false);
             this.persoC.disableBody()
-            this.perso.enableBody();
-            this.persoC.y = this.perso.y +29 ;
+            this.persoC.y = this.perso.y +30 ;
             this.persoC.x = this.perso.x
             this.persoC.setVisible(false)
             this.perso.setVisible(true)
+            this.perso.enableBody();
+
+
         }
     }
     tir(){
         let me = this;
 
 
+if (this.hide == false){
+    if (this.tireD === true){
+        this.balle = new Balle(this);
+        this.physics.add.collider(this.perso, this.balle, function (){
+            console.log("ok")
+        })
+    }
 
-        if (this.tireD === true){
-            this.balle = new Balle(this);
-            this.physics.add.collider(this.perso, this.balle, function (){
-                console.log("ok")
-            })
-        }
+}
 
 
     }
 
      IaGestion2(){
-         this.dist2 = Phaser.Math.Distance.BetweenPoints(this.perso,this.ai2);
+        if (this.hide == false){
+            this.dist2 = Phaser.Math.Distance.BetweenPoints(this.perso,this.ai2);
 
-         if (this.dist2 <= 400){
-             this.tireD = true
-             console.log("tire")
+            if (this.dist2 <= 400){
+                this.tireD = true
+                console.log("tire")
 
-         }
-         else{
-             this.tireD = false;
-         }
+            }
+            else{
+                this.tireD = false;
+            }
+
+        }
 
     }
 
@@ -226,7 +233,8 @@ class Tableau1 extends Phaser.Scene {
 
                 this.stop = this.ai.x;
 
-                this.time.addEvent({ delay: 50, callback: this.Jump, callbackScope: this });
+
+                this.time.addEvent({ delay: 100, callback: this.Jump, callbackScope: this });
 
                 if (this.dist <=  100 ){
                     this.attackAi()
@@ -280,10 +288,13 @@ class Tableau1 extends Phaser.Scene {
     Jump()
     {
         if(this.stop === this.ai.x && this.dist >=  110 ){
+            console.log(this.stop);
             this.ai.set
             this.ai.setVelocityY(-100);
         }
     }
+
+
     tp(){
     this.persoC.x = this.perso.x-10
     this.persoC.y = this.perso.y
@@ -304,6 +315,8 @@ class Tableau1 extends Phaser.Scene {
     update(){
 
 
+
+
         for(var i = 0; i < this.projectiles.getChildren().length; i++){
             var tir = this.projectiles.getChildren()[i];
             tir.update();
@@ -320,11 +333,13 @@ class Tableau1 extends Phaser.Scene {
         else{
 
         }
-            this.IaGesttion()
 
 
 
 
+
+        this.IaGesttion();
+        this.IaGestion2()
         if(this.perso.hp <= 0){
             this.perso.disableBody()
         }
@@ -377,10 +392,14 @@ class Tableau1 extends Phaser.Scene {
 
                     if (me.crouch === true){
                         me.crouch = false;
+                        me.hide = false;
+                        console.log(me.hide);
+
 
                     }
                     else {
                         me.crouch = true;
+
                         break;
 
                     }
