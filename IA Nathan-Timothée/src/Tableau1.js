@@ -234,7 +234,7 @@ if (this.hide == false){
                 this.stop = this.ai.x;
 
 
-                this.time.addEvent({ delay: 100, callback: this.Jump, callbackScope: this });
+                this.time.addEvent({ delay: 50, callback: this.Jump, callbackScope: this });
 
                 if (this.dist <=  100 ){
                     this.attackAi()
@@ -323,7 +323,8 @@ if (this.hide == false){
         }
 
 
-
+             this.IaGesttion();
+             this.IaGestion2()
 
 
             this.rouch();
@@ -338,8 +339,7 @@ if (this.hide == false){
 
 
 
-        this.IaGesttion();
-        this.IaGestion2()
+
         if(this.perso.hp <= 0){
             this.perso.disableBody()
         }

@@ -8,8 +8,8 @@ let gameConfig = {
         default: 'arcade',
         arcade: {
             debug : true,
-            gravity: { y: 600},
-            fps : 60
+            gravity: { y: 800},
+            fps : 120
         }
     },
     scene: new Tableau1()
