@@ -13,6 +13,8 @@ class Balle  {
 
         this.scene.physics.add.collider(this.balle, this.scene.perso, function () {
             console.log('touchePerso');
+            me.scene.perso.disableBody();
+            me.scene.persoC.disableBody();
             me.balle.destroy(true);
 
         })
@@ -23,6 +25,7 @@ class Balle  {
 
 
     update(){
+
         let me = this;
 
 
@@ -45,3 +48,4 @@ class Balle  {
         }
     }
 }
+

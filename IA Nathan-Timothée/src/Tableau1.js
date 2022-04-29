@@ -34,6 +34,7 @@ class Tableau1 extends Phaser.Scene {
         this.tireD = false;
         this.crouch = false;
         this.hide = false;
+        this.spot = false;
 
 
 
@@ -52,10 +53,12 @@ class Tableau1 extends Phaser.Scene {
         this.persoC.hp = 300;
 
         // Création du personnage de base
-        this.ai = this.physics.add.sprite(900, 0, 'grenouille').setOrigin(0, 0);
+        this.ai = this.physics.add.sprite(900, 225, 'grenouille').setOrigin(0, 0);
         this.ai.setDisplaySize(50,75);
         this.ai.body.setAllowGravity(true);
         this.ai.setVisible(true);
+        this.spawn1X = this.ai.x
+        this.spawn1Y = this.ai.y
         this.stop = this.ai.x
 
 
@@ -79,7 +82,6 @@ class Tableau1 extends Phaser.Scene {
         this.bullet.setDisplaySize(20,20);
         this.bullet.body.setAllowGravity(false);
         this.bullet.setVisible(false);
-
 
         // chargement de la map
         const map = this.add.tilemap("map");
@@ -129,12 +131,6 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-
-
-        this.physics.add.collider(this.bullet, this.perso, function () {
-            me.bullet.destroy(true);
-            me.perso.destroy(true);
-        })
 
         this.initKeyboard();
 
@@ -216,11 +212,13 @@ if (this.hide == false){
     IaGesttion(){
         this.gauche = false;
 
-        if (this.hide == false){
+        if (this.hide === false){
             this.dist = Phaser.Math.Distance.BetweenPoints(this.perso,this.ai);
 
 
             if (this.dist <= 300 ){
+                this.time.addEvent({ delay: 1000});
+                this.spot = false;
                 if (this.perso.x <= this.ai.x){
                     this.ai.setVelocityX(-200)
                     this.gauche = true;
@@ -240,6 +238,56 @@ if (this.hide == false){
                     this.attackAi()
                 }
             }
+            else {
+                if (this.ai.x === this.spawn1X){
+                    console.log(this.ai.x)
+                    console.log(this.spawn1X)
+                    this.spot = true;
+                    console.log(this.spot);
+                    if (this.ai.x >= this.spawn1X -10 && this.spot === true ){
+                        this.physics.moveTo(this.ai,this.spawn1X +20,this.spawn1Y,50);
+                    }
+                    else if (this.ai.x <= this.spawn1X +10 && this.spot === true ){
+                        this.physics.moveTo(this.ai,this.spawn1X -20,this.spawn1Y,50);
+                    }
+                    else{
+                        if (this.spot === false ){
+                            this.physics.moveTo(this.ai,this.spawn1X +10,this.spawn1Y,50);
+
+                        }
+
+
+                    }
+
+                }
+                else{
+                    if (this.spot === false ){
+                        this.physics.moveTo(this.ai,this.spawn1X,this.spawn1Y,200);
+
+                    }
+                    else if(this.ai.x >= this.spawn1X +50){
+                        this.physics.moveTo(this.ai,this.spawn1X -20,this.spawn1Y,50);
+                        this.spot = true
+
+                    }
+                    else if (this.ai.x <= this.spawn1X -50){
+                        console.log("zeub")
+                        this.physics.moveTo(this.ai,this.spawn1X +20,this.spawn1Y,50);
+                        this.spot = true
+                    }
+
+                }
+
+            }
+        }
+        else{
+            if (this.ai.x === this.spawn1X ){
+               console.log("test")
+            }
+            else{
+                this.physics.moveTo(this.ai,this.spawn1X,this.spawn1Y,200);
+            }
+
         }
 
 
@@ -316,11 +364,11 @@ if (this.hide == false){
 
 
 
-
         for(var i = 0; i < this.projectiles.getChildren().length; i++){
             var tir = this.projectiles.getChildren()[i];
             tir.update();
         }
+
 
 
              this.IaGesttion();
