@@ -149,8 +149,13 @@ class Tableau1 extends Phaser.Scene {
 
         this.time.addEvent({delay: 500, callback: this.tir, callbackScope: this, loop: true});
         this.physics.add.overlap(this.persoC, this.HauteHerbe, function () {
+            if(me.hide === false){
+                cam.zoomTo(0.9, 1000);
+            }
+            else{
+                cam.zoomTo(1,1000);
+            }
 
-            cam.zoomTo(0.9, 3000);
 
 
         })
