@@ -34,6 +34,8 @@ class Tableau1 extends Phaser.Scene {
         this.crouch = false;
         this.hide = false;
         this.spot = false;
+        this.PersoVX = 220;
+        let cam = this.cameras.main;
 
 
         this.speed = {
@@ -146,6 +148,12 @@ class Tableau1 extends Phaser.Scene {
         this.projectiles = this.add.group();
 
         this.time.addEvent({delay: 500, callback: this.tir, callbackScope: this, loop: true});
+        this.physics.add.overlap(this.persoC, this.HauteHerbe, function () {
+
+            cam.zoomTo(0.9, 3000);
+
+
+        })
 
 
     }
@@ -377,9 +385,9 @@ class Tableau1 extends Phaser.Scene {
         }
 
         if (!this.shiftDown && this.rightDown) {
-            this.perso.setVelocityX(160);
+            this.perso.setVelocityX(this.PersoVX);
         } else if (!this.shiftDown && this.leftDown) {
-            this.perso.setVelocityX(-160);
+            this.perso.setVelocityX(this.PersoVX * -1);
         }
 
 
@@ -450,7 +458,7 @@ class Tableau1 extends Phaser.Scene {
                             me.persoC.setVelocityX(-100);
                         }
                         me.gauche = true;
-                        me.perso.setVelocityX(-300);
+                        me.perso.setVelocityX(me.PersoVX * -1);
 
                     break;
 
@@ -460,7 +468,7 @@ class Tableau1 extends Phaser.Scene {
                         me.persoC.setVelocityX(100);
                     }
                         me.gauche = false;
-                        me.perso.setVelocityX(300);
+                        me.perso.setVelocityX(me.PersoVX);
 
                     break;
 
